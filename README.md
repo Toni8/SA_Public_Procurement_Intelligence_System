@@ -1,198 +1,67 @@
-🏛 South Africa Public Procurement Intelligence System
+# 🏛 South Africa Public Procurement Intelligence System
 
-End-to-end machine learning & business intelligence platform for eTender data (OCDS format)  
-Powered by MySQL · Streamlit · FastAPI · Scikit-learn
+**End‑to‑end machine learning & business intelligence platform for eTender data (OCDS format)**  
+*Powered by MySQL · Streamlit · FastAPI · Scikit‑learn*
 
-📌 Overview
+---
 
-This project transforms raw public procurement data into actionable intelligence across 43,000+ tenders and 8,000+ awards.
+## 📌 Overview
 
-It enables:
+This project transforms raw public procurement data into **actionable intelligence** across **43,000+ tenders** and **8,000+ awards**.
 
-Suppliers → Identify where and when to bid, and estimate contract values  
-Procurement officials → Detect governance risks and anomalies  
-Policy analysts → Understand spending patterns and market concentration
+**It enables:**
+- **Suppliers** → Identify where and when to bid, and estimate contract values  
+- **Procurement officials** → Detect governance risks and anomalies  
+- **Policy analysts** → Understand spending patterns and market concentration  
 
-The system combines machine learning, analytics, and automation into a production-style pipeline.
+The system combines machine learning, analytics, and automation into a production‑ready pipeline.
 
-✨ Key Features
-📊 Interactive Dashboard (Streamlit) – Multi-page analytics app  
-🌐 REST API (FastAPI) – 10 endpoints for predictions and insights  
-🤖 ML Forecasting – Random Forest, XGBoost, LightGBM, Ensemble models  
-📈 Full Dataset Training – Uses all awards data (no filtering)  
-🚨 Anomaly Detection – 7 governance risk flags  
-🧭 Opportunity Matrix – Province × Sector × Quarter scoring  
-📄 Excel Reporting – Automated 6-sheet reports  
-⏰ Scheduler – Automated retraining and monitoring  
-🛢 MySQL Integration – Direct OCDS pipeline  
-🧪 Synthetic Data Support – Run without a database  
+---
 
-📊 Architecture
-Flow Overview
-MySQL (OCDS Staging Tables)
-        ↓
-Data Loading & EDA
-        ↓
-Feature Engineering
-        ↓
-Anomaly Detection + Opportunity Matrix
-        ↓
-Machine Learning Pipeline
-        ↓
-Trained Models (.pkl)
-        ↓
------------------------------------------
-|   Dashboard   |    API    |  Reports   |
-|  Streamlit    | FastAPI   |   Excel    |
------------------------------------------
-        ↓
-Scheduler (Automation & Monitoring)
+## ✨ Key Features
 
-📁 Data
-Primary Source: MySQL database (procurement_intelligence)  
-Tables: main_staging, awards_staging, contracts_staging  
-Fallback: Synthetic data (utils/generate_sample_data.py)  
-Training Approach  
-Uses full dataset (~5,600+ awards)  
-No value filtering applied  
-Covers full spectrum:  
-Small contracts  
-Medium tenders  
-Large awards  
+| Feature | Description |
+|---------|-------------|
+| 📊 **Interactive Dashboard** | Multi‑page Streamlit app with live charts, opportunity matrix, value forecaster, anomaly monitor, and supplier strategy |
+| 🌐 **REST API** | 10 FastAPI endpoints for programmatic access to predictions, opportunities, and anomalies |
+| 🤖 **ML Forecasting** | Random Forest, XGBoost, LightGBM, Ridge, Voting Ensemble – predicts contract values on the full award dataset |
+| 📈 **Full Dataset Training** | Uses all available awards (~5,600 rows) to capture the real distribution – no arbitrary value filtering |
+| 🚨 **Anomaly Detection** | 7 governance red flags: restricted methods, mega‑contracts, new‑supplier awards, statistical outliers, concentration risk, quarterly spikes |
+| 🧭 **Opportunity Matrix** | Province × Sector × Quarter scoring with reliability tiers and seasonal weights |
+| 📄 **Excel Reporting** | Automatically generates a professionally formatted 6‑sheet workbook |
+| ⏰ **Automated Scheduler** | Weekly full retrain, daily anomaly refresh, mid‑week matrix rebuild – completely hands‑off |
+| 🛢️ **MySQL Integration** | Direct connection to OCDS staging tables with automatic feature engineering |
+| 🧪 **Synthetic Data Support** | Run the entire pipeline without a database using realistic synthetic data |
 
-Result: More realistic, production-ready predictions  
+---
 
-🚀 Quick Start
-1. Clone Repository
+## 📊 Architecture (Simplified Flow)
+
+1. **MySQL (OCDS Staging Tables)**
+2. **Data Loading & EDA** – Fetch, clean, and explore
+3. **Feature Engineering** – Build interaction terms, temporal & duration features, target encoding
+4. **Anomaly Detection** + **Opportunity Matrix** – Apply 7 governance flags, score province×sector×quarter cells
+5. **ML Training Pipeline** – Train Random Forest, XGBoost, LightGBM, Ensemble models; save to `.pkl`
+6. **Trained Models** → **Dashboard (Streamlit)** / **REST API (FastAPI)** / **Excel Reporter (openpyxl)**
+7. **Scheduler (APScheduler)** – Automates retraining, anomaly refreshes, matrix updates
+
+---
+
+## 📁 Data
+
+**Primary Source:** MySQL database `procurement_intelligence`  
+**Tables:** `main_staging`, `awards_staging`, `contracts_staging`, `awards_suppliers_staging`  
+**Fallback:** Synthetic data generator (`utils/generate_sample_data.py`) – 10,000 realistic records  
+
+**Training Strategy:**  
+Trains on the **full award dataset** with no value filtering. This allows the model to learn the complete market distribution – from small purchases to billion‑rand mega‑deals – making it more robust in production.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the Repository
+
+```bash
 git clone <repo-url>
 cd procurement_intelligence
-2. Create Environment
-conda create -n procurement python=3.11
-conda activate procurement
-3. Install Dependencies
-pip install -r requirements.txt
-4. Configure Database
-
-Edit config.py:
-
-DB_CONFIG = {
-    "host": "localhost",
-    "port": 3306,
-    "user": "root",
-    "password": "your_password",
-    "database": "procurement_intelligence",
-    "charset": "utf8mb4",
-}
-🧪 Run the Pipeline
-With MySQL
-python train_pipeline.py
-Without MySQL (Synthetic Data)
-python utils/generate_sample_data.py
-python train_pipeline.py --skip-db
-Outputs
-models/ → trained models  
-reports/ → CSV / Excel outputs  
-data/master_with_anomalies.csv → cleaned dataset  
-
-📓 Notebook (Exploration)
-
-Open:
-
-notebooks/ml.ipynb
-
-Includes:
-
-Data loading  
-Feature engineering  
-Model training  
-Evaluation and comparison  
-
-🖥️ Dashboard
-streamlit run dashboard/app.py
-
-Open in browser: http://localhost:8501
-
-🌐 API
-uvicorn api.main:app --reload --port 8000
-
-Docs: http://localhost:8000/docs
-
-Key Endpoints
-POST /predict/value – Predict contract value  
-GET /opportunities – Top opportunities  
-GET /anomalies – Flagged contracts  
-GET /benchmarks – Sector/province benchmarks  
-
-📊 Excel Reports
-python reports/excel_reporter.py
-
-Includes:
-
-Executive Summary  
-Opportunity Matrix  
-Heatmap  
-Anomaly Register  
-Benchmarks  
-Model Performance  
-
-⏰ Scheduler
-python scheduler/job_runner.py
-Job	Frequency	Description  
-Full retrain	Sunday 02:00	Retrains models  
-Anomaly scan	Mon–Sat 06:00	Updates risk flags  
-Matrix refresh	Wednesday 08:00	Updates opportunity scores  
-
-📈 Model Notes
-Trained on full dataset (no filtering)  
-Handles full market distribution  
-Strong generalisation across contract sizes  
-
-Trade-off:
-
-Slightly lower R² vs filtered models  
-Better real-world applicability  
-
-🔍 Key Insights
-Strong right-skew in values → medians preferred  
-Procurement peaks in August, slows Dec–Jan  
-Provincial differences in volume vs value  
-Contract durations show bimodal distribution  
-
-🚨 Anomaly Flags
-Flag	Description  
-1	Restricted method + high value  
-2	Non-open mega contract  
-3	New supplier large award  
-4	Extreme high-value contract  
-5	Statistical outlier  
-6	Supplier concentration  
-7	Provincial spend spike  
-
-🛠 Tech Stack
-Python, pandas, NumPy  
-MySQL, SQLAlchemy  
-scikit-learn, XGBoost, LightGBM  
-Streamlit, Plotly  
-FastAPI, uvicorn  
-openpyxl  
-APScheduler  
-pytest  
-
-📂 Project Structure
-procurement_intelligence/
-├── config.py
-├── train_pipeline.py
-├── utils/
-├── models/
-├── dashboard/
-├── api/
-├── reports/
-├── scheduler/
-├── notebooks/
-├── tests/
-
-📜 License
-
-Open-source reference implementation.
-
-Built as a full-stack procurement intelligence system for South Africa’s eTender ecosystem
