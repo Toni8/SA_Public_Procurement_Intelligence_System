@@ -1,0 +1,60 @@
+2026-04-24 12:37:52,672 INFO scheduler --- ============================================================
+2026-04-24 12:37:52,672 INFO scheduler --- JOB START --- Full Pipeline Retrain
+2026-04-24 12:37:52,688 WARNING scheduler --- DB load failed (cannot import name 'load_master_df' from 'utils.db_loader' (C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\utils\db_loader.py)), falling back to CSV sample.
+2026-04-24 12:37:54,176 INFO models.anomaly_detector --- Running anomaly detection pipeline...
+2026-04-24 12:37:54,683 INFO models.anomaly_detector --- Anomaly scan complete: 451/10000 flagged (4.5%) — 60 high-risk.
+2026-04-24 12:37:54,892 INFO models.opportunity_matrix --- Opportunity matrix: 108 province×category×quarter cells.
+2026-04-24 12:37:54,904 INFO models.opportunity_matrix --- Matrix saved: C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.pkl + C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.csv
+2026-04-24 12:37:57,973 INFO utils.feature_engineering --- Feature matrix: (10000, 14), target range [6.96, 21.30]
+2026-04-24 12:37:57,973 INFO models.value_forecaster --- Train: 8,000  |  Test: 2,000
+2026-04-24 12:37:57,973 INFO models.value_forecaster --- Training ridge...
+2026-04-24 12:38:02,869 INFO models.value_forecaster ---   ridge: R²=0.0560  CV-R²=0.0771±0.0090  MAPE=2297.9%
+2026-04-24 12:38:02,899 INFO models.value_forecaster --- Training random_forest...
+2026-04-24 12:38:16,685 INFO models.value_forecaster ---   random_forest: R²=0.0566  CV-R²=0.1086±0.0199  MAPE=2926.6%
+2026-04-24 12:38:16,960 INFO models.value_forecaster --- Training xgboost...
+2026-04-24 12:38:21,197 INFO models.value_forecaster ---   xgboost: R²=0.0018  CV-R²=0.0579±0.0219  MAPE=3038.3%
+2026-04-24 12:38:21,267 INFO models.value_forecaster --- Training lightgbm...
+2026-04-24 12:38:38,273 INFO models.value_forecaster ---   lightgbm: R²=-0.0013  CV-R²=0.0366±0.0298  MAPE=3099.1%
+2026-04-24 12:38:38,388 INFO models.value_forecaster --- Training ensemble...
+2026-04-24 12:39:04,476 INFO models.value_forecaster ---   ensemble: R²=0.0304  CV-R²=0.0829±0.0234  MAPE=2957.4%
+2026-04-24 12:55:32,578 INFO scheduler --- ============================================================
+2026-04-24 12:55:32,578 INFO scheduler --- JOB START --- Full Pipeline Retrain
+2026-04-24 12:55:32,592 WARNING scheduler --- DB load failed (cannot import name 'load_master_df' from 'utils.db_loader' (C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\utils\db_loader.py)), falling back to CSV sample.
+2026-04-24 12:55:33,964 INFO models.anomaly_detector --- Running anomaly detection pipeline...
+2026-04-24 12:55:34,421 INFO models.anomaly_detector --- Anomaly scan complete: 451/10000 flagged (4.5%) — 60 high-risk.
+2026-04-24 12:55:34,585 INFO models.opportunity_matrix --- Opportunity matrix: 108 province×category×quarter cells.
+2026-04-24 12:55:34,601 INFO models.opportunity_matrix --- Matrix saved: C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.pkl + C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.csv
+2026-04-24 12:55:37,135 INFO utils.feature_engineering --- Feature matrix: (10000, 14), target range [6.96, 21.30]
+2026-04-24 12:55:37,135 INFO models.value_forecaster --- Train: 8,000  |  Test: 2,000
+2026-04-24 12:55:37,135 INFO models.value_forecaster --- Training ridge...
+2026-04-24 12:55:42,255 INFO models.value_forecaster ---   ridge: R²=0.0560  CV-R²=0.0771±0.0090  MAPE=2297.9%
+2026-04-24 12:55:42,296 INFO models.value_forecaster --- Training random_forest...
+2026-04-24 12:55:55,254 INFO models.value_forecaster ---   random_forest: R²=0.0566  CV-R²=0.1086±0.0199  MAPE=2926.6%
+2026-04-24 12:55:55,468 INFO models.value_forecaster --- Training xgboost...
+2026-04-24 12:55:57,343 INFO models.value_forecaster ---   xgboost: R²=0.0018  CV-R²=0.0579±0.0219  MAPE=3038.3%
+2026-04-24 12:55:57,368 INFO models.value_forecaster --- Training lightgbm...
+2026-04-24 13:05:50,169 INFO scheduler --- ============================================================
+2026-04-24 13:05:50,169 INFO scheduler --- JOB START --- Full Pipeline Retrain
+2026-04-24 13:05:51,423 INFO models.anomaly_detector --- Running anomaly detection pipeline...
+2026-04-24 13:05:51,677 INFO models.anomaly_detector --- Anomaly scan complete: 1951/4753 flagged (41.0%) — 1294 high-risk.
+2026-04-24 13:05:51,819 INFO models.opportunity_matrix --- Opportunity matrix: 156 province×category×quarter cells.
+2026-04-24 13:05:51,850 INFO models.opportunity_matrix --- Matrix saved: C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.pkl + C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\opportunity_matrix.csv
+2026-04-24 13:05:54,992 INFO utils.feature_engineering --- Feature matrix: (4753, 14), target range [0.69, 23.76]
+2026-04-24 13:05:55,008 INFO models.value_forecaster --- Train: 3,802  |  Test: 951
+2026-04-24 13:05:55,008 INFO models.value_forecaster --- Training ridge...
+2026-04-24 13:06:02,406 INFO models.value_forecaster ---   ridge: R²=0.1702  CV-R²=0.1463±0.0113  MAPE=791.3%
+2026-04-24 13:06:02,557 INFO models.value_forecaster ---   Saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\ridge.pkl
+2026-04-24 13:06:02,557 INFO models.value_forecaster --- Training random_forest...
+2026-04-24 13:06:10,038 INFO models.value_forecaster ---   random_forest: R²=0.3276  CV-R²=0.3071±0.0188  MAPE=660.5%
+2026-04-24 13:06:10,213 INFO models.value_forecaster ---   Saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\random_forest.pkl
+2026-04-24 13:06:10,213 INFO models.value_forecaster --- Training xgboost...
+2026-04-24 13:06:11,770 INFO models.value_forecaster ---   xgboost: R²=0.2609  CV-R²=0.2664±0.0328  MAPE=909.4%
+2026-04-24 13:06:11,956 INFO models.value_forecaster ---   Saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\xgboost.pkl
+2026-04-24 13:06:11,956 INFO models.value_forecaster --- Training lightgbm...
+2026-04-24 13:06:24,306 INFO models.value_forecaster ---   lightgbm: R²=0.2449  CV-R²=0.2505±0.0406  MAPE=1047.7%
+2026-04-24 13:06:24,408 INFO models.value_forecaster ---   Saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\lightgbm.pkl
+2026-04-24 13:06:24,408 INFO models.value_forecaster --- Training ensemble...
+2026-04-24 13:06:34,702 INFO models.value_forecaster ---   ensemble: R²=0.2916  CV-R²=0.2912±0.0288  MAPE=815.5%
+2026-04-24 13:06:35,264 INFO models.value_forecaster ---   Saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\ensemble.pkl
+2026-04-24 13:06:35,281 INFO models.value_forecaster --- Feature importance saved -> C:\Users\kalol\Documents\SA_Public_Procurement_Intelligence_System\08_procurement_intelligence\models\feature_importance.csv
+2026-04-24 13:06:38,542 INFO scheduler --- Full pipeline complete in 48.4s

@@ -1,19 +1,19 @@
 """ ML training and contract value forecasting
 ============================================================
- models/value_forecaster.py
- Contract Value Forecasting — Multi-model pipeline
- 
- Models trained (log-transformed target):
-   1. Random Forest Regressor       (baseline tree ensemble)
-   2. XGBoost Regressor             (gradient boosting)
-   3. LightGBM Regressor            (fast gradient boosting)
-   4. Ridge Regression              (linear baseline)
-   5. VotingRegressor (soft ensemble of top 3)
+models/value_forecaster.py
+Contract Value Forecasting — Multi-model pipeline
 
- EDA key insight implemented:
-   - interaction terms: province × quarter × sector
-   - log-transform of target
-   - median-anchored reporting
+Models trained (log-transformed target):
+1. Random Forest Regressor       (baseline tree ensemble)
+2. XGBoost Regressor             (gradient boosting)
+3. LightGBM Regressor            (fast gradient boosting)
+4. Ridge Regression              (linear baseline)
+5. VotingRegressor (soft ensemble of top 3)
+
+EDA key insight implemented:
+- interaction terms: province × quarter × sector
+- log-transform of target
+- median-anchored reporting
 ============================================================
 """
 
@@ -145,7 +145,7 @@ def train_all_models(df: pd.DataFrame) -> dict:
         y_true_zar = np.expm1(y_test)
 
         cv_scores  = cross_val_score(model, X_train, y_train,
-                                     cv=kf, scoring="r2", n_jobs=-1)
+                                    cv=kf, scoring="r2", n_jobs=-1)
 
         mae_log    = mean_absolute_error(y_test, y_pred_log)
         r2_log     = r2_score(y_test, y_pred_log)
@@ -164,8 +164,8 @@ def train_all_models(df: pd.DataFrame) -> dict:
         # Save model
         out_path = MODEL_DIR / f"{name}.pkl"
         joblib.dump({"model": model, "feature_names": feature_names,
-                     "label_enc": label_enc, "freq_enc": freq_enc}, out_path)
-        logger.info(f"  Saved → {out_path}")
+                    "label_enc": label_enc, "freq_enc": freq_enc}, out_path)
+        logger.info(f"  Saved -> {out_path}")
 
         results[name] = {
             "model":         model,
@@ -192,7 +192,7 @@ def train_all_models(df: pd.DataFrame) -> dict:
             )
         fi_path = MODEL_DIR / "feature_importance.csv"
         fi.sort_values(ascending=False).to_csv(fi_path, header=["importance"])
-        logger.info(f"Feature importance saved → {fi_path}")
+        logger.info(f"Feature importance saved -> {fi_path}")
 
     return results
 
@@ -255,7 +255,7 @@ def predict_contract_value(
         df_row[["province", "category", "method"]]
     )
     duration_order = {"<3mo": 0, "3-6mo": 1, "6-12mo": 2,
-                      "1-2yr": 3, "2-3yr": 4, ">3yr": 5}
+                    "1-2yr": 3, "2-3yr": 4, ">3yr": 5}
     df_row["duration_band"] = df_row["duration_band"].map(duration_order).fillna(-1)
     df_row[["province_quarter", "prov_cat_q"]] = fenc.transform(
         df_row[["province_quarter", "prov_cat_q"]]
@@ -314,5 +314,3 @@ def print_model_comparison(results: dict):
     print(df.to_string(index=False))
     print("="*70 + "\n")
     return df
-
-
