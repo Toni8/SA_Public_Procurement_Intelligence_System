@@ -1,88 +1,80 @@
-# 🏛 South Africa Public Procurement Intelligence System
+🏛 South Africa Public Procurement Intelligence System
 
-**End‑to‑end machine learning & business intelligence solution for e‑tender data (OCDS format)**  
-*Data source: South African eTenders portal · MySQL staging tables*
+End-to-end machine learning & business intelligence platform for eTender data (OCDS format)  
+Powered by MySQL · Streamlit · FastAPI · Scikit-learn
 
----
+📌 Overview
 
-## 📌 Overview
+This project transforms raw public procurement data into actionable intelligence across 43,000+ tenders and 8,000+ awards.
 
-This system transforms raw procurement data from over **43,000 tenders** and **8,000 awards** into **actionable insights** for:
+It enables:
 
-- **Suppliers** – identify where and when to bid, predict contract values  
-- **Procurement officials** – monitor governance red flags  
-- **Policy analysts** – understand spending patterns and market concentration  
+Suppliers → Identify where and when to bid, and estimate contract values  
+Procurement officials → Detect governance risks and anomalies  
+Policy analysts → Understand spending patterns and market concentration
 
-It provides a **Streamlit dashboard**, a **FastAPI REST API**, an **automated Excel report generator**, and a **background scheduler** for continuous updates.
+The system combines machine learning, analytics, and automation into a production-style pipeline.
 
----
+✨ Key Features
+📊 Interactive Dashboard (Streamlit) – Multi-page analytics app  
+🌐 REST API (FastAPI) – 10 endpoints for predictions and insights  
+🤖 ML Forecasting – Random Forest, XGBoost, LightGBM, Ensemble models  
+📈 Full Dataset Training – Uses all awards data (no filtering)  
+🚨 Anomaly Detection – 7 governance risk flags  
+🧭 Opportunity Matrix – Province × Sector × Quarter scoring  
+📄 Excel Reporting – Automated 6-sheet reports  
+⏰ Scheduler – Automated retraining and monitoring  
+🛢 MySQL Integration – Direct OCDS pipeline  
+🧪 Synthetic Data Support – Run without a database  
 
-## ✨ Key Features
+📊 Architecture
+Flow Overview
+MySQL (OCDS Staging Tables)
+        ↓
+Data Loading & EDA
+        ↓
+Feature Engineering
+        ↓
+Anomaly Detection + Opportunity Matrix
+        ↓
+Machine Learning Pipeline
+        ↓
+Trained Models (.pkl)
+        ↓
+-----------------------------------------
+|   Dashboard   |    API    |  Reports   |
+|  Streamlit    | FastAPI   |   Excel    |
+-----------------------------------------
+        ↓
+Scheduler (Automation & Monitoring)
 
-- **Interactive Dashboard** (Streamlit) – 5‑page web app with live charts, opportunity matrix, value forecaster, anomaly monitor, and supplier strategy.  
-- **REST API** (FastAPI) – 10 endpoints for integration with other tools.  
-- **Automated Excel Reporter** – produces a 6‑sheet formatted workbook on demand.  
-- **ML‑based Contract Value Forecasting** – Random Forest, XGBoost, LightGBM, Voting Ensemble; R² up to **0.40** on filtered data.  
-- **7 Governance Anomaly Flags** – restricted methods, new‑supplier mega‑deals, statistical outliers, etc.  
-- **Opportunity Matrix** – province × sector × quarter scoring with reliability tiers.  
-- **Background Scheduler** – weekly retrain, daily anomaly scan, mid‑week matrix refresh.  
-- **MySQL Integration** – direct connection to OCDS staging tables, with automatic feature engineering.  
-- **Synthetic Data Generator** – test the full pipeline without a database.
+📁 Data
+Primary Source: MySQL database (procurement_intelligence)  
+Tables: main_staging, awards_staging, contracts_staging  
+Fallback: Synthetic data (utils/generate_sample_data.py)  
+Training Approach  
+Uses full dataset (~5,600+ awards)  
+No value filtering applied  
+Covers full spectrum:  
+Small contracts  
+Medium tenders  
+Large awards  
 
----
+Result: More realistic, production-ready predictions  
 
-## 📊 Architecture Overview
-MySQL (staging tables)
-│
-┌───────────┴───────────┐
-│ Data Loader / EDA │
-└───────────┬───────────┘
-│
-┌─────────────────┼─────────────────┐
-│ │ │
-Anomaly Detector Opportunity Matrix Feature Engineering
-│ │ │
-└─────────────────┼──────────────────┘
-│
-ML Training Pipeline
-│
-┌─────────────────┼──────────────────┐
-│ │ │
-Models (pkl) API (FastAPI) Dashboard (Streamlit)
-│
-Auto Scheduler / Excel Reporter
-
-text
-
----
-
-## 📁 Data Sources
-
-**Primary source:** MySQL database `procurement_intelligence` with standard OCDS staging tables (`main_staging`, `contracts_staging`, `awards_staging`, etc.).  
-**Fallback / testing:** Synthetic data generator (`utils/generate_sample_data.py`) creates 10,000 realistic records.
-
-During development, a **smart filtering step** was applied: only awards that had a completed contract **or** an award value above R500,000 were kept for model training (≈1,800 rows). The full dataset (5,679 awards) is used for anomaly detection and matrix building.
-
----
-
-## 🚀 Quick Start
-
-### 1️⃣ Clone the repository & navigate to the project
-
-```bash
+🚀 Quick Start
+1. Clone Repository
 git clone <repo-url>
-cd 08_procurement_intelligence
-2️⃣ Create and activate a Python environment
-bash
+cd procurement_intelligence
+2. Create Environment
 conda create -n procurement python=3.11
 conda activate procurement
-3️⃣ Install dependencies
-bash
+3. Install Dependencies
 pip install -r requirements.txt
-4️⃣ Configure the database connection
-Edit config.py with your MySQL credentials:
+4. Configure Database
 
-python
+Edit config.py:
+
 DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
@@ -91,195 +83,116 @@ DB_CONFIG = {
     "database": "procurement_intelligence",
     "charset": "utf8mb4",
 }
-If you do not have a MySQL database, you can skip this and use the synthetic data generator (see Section 6).
-
-🧪 5. Run the Training Pipeline
-The master script train_pipeline.py loads data, detects anomalies, builds the opportunity matrix, trains all models, and saves reports.
-
-With MySQL (your real data):
-
-bash
+🧪 Run the Pipeline
+With MySQL
 python train_pipeline.py
-Without MySQL (synthetic data):
-
-bash
-# Generate sample data first (one‑time)
+Without MySQL (Synthetic Data)
 python utils/generate_sample_data.py
-
-# Then run the pipeline
 python train_pipeline.py --skip-db
-After completion, you’ll find:
+Outputs
+models/ → trained models  
+reports/ → CSV / Excel outputs  
+data/master_with_anomalies.csv → cleaned dataset  
 
-Trained models in models/
+📓 Notebook (Exploration)
 
-CSV/JSON reports in reports/
+Open:
 
-The master dataset with anomalies at data/master_with_anomalies.csv
+notebooks/ml.ipynb
 
-📓 6. Interactive Analysis (Jupyter Notebook)
-For step‑by‑step exploration, open notebooks/ml.ipynb. It contains cells to:
+Includes:
 
-Connect to MySQL (or load the synthetic CSV)
+Data loading  
+Feature engineering  
+Model training  
+Evaluation and comparison  
 
-Apply feature engineering and smart filtering
+🖥️ Dashboard
+streamlit run dashboard/app.py
 
-Detect anomalies
+Open in browser: http://localhost:8501
 
-Build the opportunity matrix
-
-Train and compare models (including tuned Random Forest & stacking ensemble)
-
-Save all outputs
-
-Run the notebook cells sequentially to reproduce the best model (stacking, R²≈0.40).
-
-🖥️ 7. Launch the Dashboard
-bash
-streamlit run dashboards/app.py
-Opens a browser at http://localhost:8501.
-The dashboard reads the latest models and matrix from the models/ folder.
-
-🌐 8. Start the REST API
-bash
+🌐 API
 uvicorn api.main:app --reload --port 8000
-Swagger docs at http://localhost:8000/docs.
 
-Key endpoints:
+Docs: http://localhost:8000/docs
 
-POST /predict/value – forecast a contract value
+Key Endpoints
+POST /predict/value – Predict contract value  
+GET /opportunities – Top opportunities  
+GET /anomalies – Flagged contracts  
+GET /benchmarks – Sector/province benchmarks  
 
-GET /opportunities – top bidding opportunities
-
-GET /anomalies – flagged contracts
-
-GET /benchmarks – value benchmarks by sector/province
-
-📊 9. Generate the Excel Report
-Automatic: The scheduler does it for you (next section).
-Manual: either run the reporter directly:
-
-bash
+📊 Excel Reports
 python reports/excel_reporter.py
-or call the function from your notebook:
 
-python
-from reports.excel_reporter import generate_excel_report
-# ... (load df, matrix, brief)
-output_path = generate_excel_report(df, matrix, brief)
-The resulting workbook contains six polished sheets: Executive Summary, Opportunity Matrix, Heatmap, Anomaly Register, Value Benchmarks, and Model Performance.
+Includes:
 
-⏰ 10. Automated Scheduling
-The system includes a light‑weight job runner that keeps everything up‑to‑date.
+Executive Summary  
+Opportunity Matrix  
+Heatmap  
+Anomaly Register  
+Benchmarks  
+Model Performance  
 
-bash
+⏰ Scheduler
 python scheduler/job_runner.py
-This starts a background process with three jobs on SAST time:
+Job	Frequency	Description  
+Full retrain	Sunday 02:00	Retrains models  
+Anomaly scan	Mon–Sat 06:00	Updates risk flags  
+Matrix refresh	Wednesday 08:00	Updates opportunity scores  
 
-Job	Frequency	What it does
-Full pipeline retrain	Sunday, 02:00	Reloads data, retrains all models, rebuilds matrix, generates Excel report
-Anomaly refresh	Mon‑Sat, 06:00	Re‑scans for new governance flags
-Matrix rebuild	Wednesday, 08:00	Updates opportunity scores
-You can also trigger any job manually:
+📈 Model Notes
+Trained on full dataset (no filtering)  
+Handles full market distribution  
+Strong generalisation across contract sizes  
 
-bash
-python scheduler/job_runner.py --run-now full
-python scheduler/job_runner.py --run-now anomaly
-python scheduler/job_runner.py --run-now matrix
-The scheduler uses the real data file data/master_with_anomalies.csv (automatically created by the pipeline). No live DB connection is required for the scheduled jobs – they read from the cleaned CSV.
+Trade-off:
 
-📈 Model Performance (Latest Run)
-After smart filtering and feature engineering (cyclic month, buyer‑category interactions, outlier capping), the final stacking ensemble achieved:
+Slightly lower R² vs filtered models  
+Better real-world applicability  
 
-Model	R² (test)	CV R² (mean)	MAE (log)
-Stacking	0.3988	0.3759	1.574
-Ensemble	0.3919	0.3807	1.554
-Random Forest	0.3793	0.3619	1.615
-XGBoost	0.3667	0.3549	1.579
-LightGBM	0.3571	0.3471	1.582
-Ridge	0.1740	0.1510	1.992
-Top features: duration_days, buyer_cat_count, duration_band, year, category.
-
-📂 Project Structure
-text
-procurement_intelligence/
-├── config.py                     # DB, thresholds, paths
-├── train_pipeline.py             # Master training script
-├── requirements.txt
-│
-├── utils/
-│   ├── db_loader.py              # MySQL → pandas (award & contract queries)
-│   ├── feature_engineering.py    # Encoders, feature matrix builder
-│   └── generate_sample_data.py   # Synthetic data for testing
-│
-├── models/
-│   ├── value_forecaster.py       # RF, XGB, LGB, Ridge, VotingRegressor
-│   ├── opportunity_matrix.py     # Province × sector × quarter scoring
-│   ├── anomaly_detector.py       # 7 governance flags + statistical tests
-│   ├── recommendation_engine.py  # Supplier/official/policy briefs
-│
-├── dashboard/
-│   └── app.py                    # 5‑page Streamlit dashboard
-│
-├── api/
-│   └── main.py                   # FastAPI (10 endpoints)
-│
-├── reports/
-│   └── excel_reporter.py         # 6‑sheet formatted Excel report
-│
-├── scheduler/
-│   └── job_runner.py             # Weekly/daily background jobs
-│
-├── tests/
-│   └── test_pipeline.py          # 30 pytest unit tests
-│
-├── notebooks/
-│   └── ml.ipynb                  # Interactive end‑to‑end analysis
-│
-├── data/                         # (auto‑created) cleaned CSVs
-├── models/                       # (auto‑created) trained .pkl files
-└── reports/                      # (auto‑created) outputs
-🔍 Key EDA Findings Embedded
-Extreme value skew – median ~R943k, mean heavily inflated → all reporting uses medians.
-
-August is the peak month; Dec‑Jan dormant.
-
-Gauteng has high volume but low average value – flagged in the opportunity matrix.
-
-KwaZulu‑Natal Works in Q2 is the single best opportunity cell.
-
-Contract duration follows a bimodal pattern (2‑3 years or <3 months).
+🔍 Key Insights
+Strong right-skew in values → medians preferred  
+Procurement peaks in August, slows Dec–Jan  
+Provincial differences in volume vs value  
+Contract durations show bimodal distribution  
 
 🚨 Anomaly Flags
-The system automatically tags contracts with:
+Flag	Description  
+1	Restricted method + high value  
+2	Non-open mega contract  
+3	New supplier large award  
+4	Extreme high-value contract  
+5	Statistical outlier  
+6	Supplier concentration  
+7	Provincial spend spike  
 
-Flag	Condition	Severity
-FLAG 1	Restricted method + value > R15M	2
-FLAG 2	Non‑open mega‑contract > R100M	4
-FLAG 3	New supplier + value > R50M	5
-FLAG 4	Any contract > R200M	3
-FLAG 5	Z‑score > 3 within group	2
-FLAG 6	Supplier > 30% of category spend	3
-FLAG 7	Quarterly spend > 2× provincial average	1
-🛠️ Technologies Used
-Data & Analysis: Python, pandas, NumPy, MySQL, SQLAlchemy
+🛠 Tech Stack
+Python, pandas, NumPy  
+MySQL, SQLAlchemy  
+scikit-learn, XGBoost, LightGBM  
+Streamlit, Plotly  
+FastAPI, uvicorn  
+openpyxl  
+APScheduler  
+pytest  
 
-Machine Learning: scikit‑learn, XGBoost, LightGBM, joblib
+📂 Project Structure
+procurement_intelligence/
+├── config.py
+├── train_pipeline.py
+├── utils/
+├── models/
+├── dashboard/
+├── api/
+├── reports/
+├── scheduler/
+├── notebooks/
+├── tests/
 
-Dashboard & API: Streamlit, Plotly, FastAPI, uvicorn, Pydantic
+📜 License
 
-Reporting: openpyxl
+Open-source reference implementation.
 
-Scheduling: APScheduler
-
-Testing: pytest
-
-📌 Licence & Contact
-This project is provided as an open‑source reference implementation. For questions or customisation, please open an issue.
-
-Built as a full‑stack procurement intelligence solution for South Africa’s eTender system.
-
-text
-
-Copy the entire content above and paste it into your `README.md` file – it’s ready to go.
-
-update this to generate with full data 
+Built as a full-stack procurement intelligence system for South Africa’s eTender ecosystem
